@@ -159,11 +159,15 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 1. **Generate Data:**
    - Run the Python script to generate the dataset.
 2. **Start Kafka:**
-   - Set up Kafka and produce data to the `customer_orders` topic.
-3. **Run Spark Jobs:**
-   - Consume Kafka data, transform it, and store it in HDFS.
+   - Set up Kafka and run producer and consumer data to the `customer_orders` topic.
+3. **Upload to HDFS**
+   - Run the shell script named upload_to_hdfs.sh. Which puts the data in HDFS.
+3. **Run Spark Job:**
+   - Run the run_spark_job.sh shell script which will transform the data and put it in HDFS under a new folder.
 4. **Load Data to HBase:**
-   - Use Spark to write transformed data into HBase.
+   - Run the hdfs_to_hbase.sh script this will put the data in your HBASE.
+5. **Start Thrift**
+   - Start the thrift server in the HBASE container.
 5. **Launch Flask App:**
    - Start the Flask server and access dashboards at `http://localhost:5000`.
 
