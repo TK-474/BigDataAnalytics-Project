@@ -14,7 +14,7 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 
 ## **Data Flow**
 
-![Big Data Architecture](Big%20Data%20Architecture%20(1).png)
+![Big Data Architecture](BDA_Project_Architecture.png)
 
 ### **1. Data Generation**
 - **Why Generated Data?**
