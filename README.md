@@ -25,62 +25,73 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 - **Schema:**
   The data schema generated was as follows:
   ```
-  - customer:CustomerID
-  - customer:Name
-  - customer:Age
-  - customer:Country
-  - customer:RegistrationDate
-  - order:OrderDate
-  - order:Quantity
-  - order:TotalAmount
-  - product:ProductID
-  - product:ProductName
-  - product:Category
-  - product:Price
-  - shipment:ShippingAddress
-  - shipment:ShippingDate
-  - row_key
+  - CustomerID
+  - Name
+  - Age
+  - Country
+  - RegistrationDate
+  - OrderDate
+  - Quantity
+  - TotalAmount
+  - ProductID
+  - ProductName
+  - Category
+  - Price
+  - ShippingAddress
+  - ShippingDate
+  - OrderID
   ```
 
 - **Deliberate Data Errors:**
-  - Missing values were introduced in some rows.
-  - Errors such as typos and invalid values were deliberately included to simulate real-world messy data, allowing us to demonstrate data cleaning and transformation.
+  - Missing values were introduced in TotalAmount column.
+  - Errors such as typos in Country by misspelling Pakistan to "Pakist" and in productName by replacing "Gaming Console" with "GConsole".
 
 ---
 
 ### **2. Data Storage**
 #### **Initial Load to HDFS**
 - An **800MB chunk of data** was loaded into HDFS manually via the NameNode.
+- This was done to simulate Big Data processing and emphasize the robustness of the architecture.
 
 #### **Streaming Remaining Data via Kafka**
-- The rest of the data (approx. 1.2GB) was streamed incrementally via **Kafka** into the NameNode, which appended it to the already stored data in HDFS.
-- **Kafka Topic:** `customer_orders`
+- The rest of the data (approx. 200MB) was streamed incrementally via **Kafka** into the NameNode, which appended to file there and replaced HDFS data.
 - **Ingestion Workflow:**
   1. Python producer script streamed data row by row to Kafka.
-  2. Spark Structured Streaming consumed Kafka data and appended it to HDFS.
+  2. Consumer consumed data and appended to Namenode Local File.
+  3. Updated data was put into HDFS.
 
 ---
 
 ### **3. Data Transformation**
 #### **Apache Spark for Data Cleaning and Transformation**
-- **Data Cleaning:**
-  - Fixed missing values (e.g., filling null `Age` values with the median).
-  - Corrected typos in country names and other string fields.
-
-- **Data Transformation:**
-  - Added derived columns such as `AgeGroup` (e.g., Young, Middle-aged, Senior).
-  - Normalized numerical values like `TotalAmount` for downstream analytics.
+  - Fixed missing values in TotalAmount column by deriving fro Product x Quantity.
+  - Corrected typos in "Pakistan" spelling in Country column and replaced "GConsole" with "Gaming Console" in ProductName column.
 
 - **Output:**
-  - Transformed data was written back to HDFS in Parquet format for efficient storage and querying.
+  - Transformed data was written back to HDFS in /transformation directory
 
 ---
 
 ### **4. Storing Transformed Data in HBase**
 - After transformation, the cleaned and processed data was loaded into **HBase**.
 - **Schema in HBase:**
-  - Table Name: `customer_orders`
-  - Columns mapped to HBase column families and qualifiers.
+  - Table Name: `ec`
+  - Columns mapped to HBase column families as shown:
+  - - customer:CustomerID
+    - customer:Name
+    - customer:Age
+    - customer:Country
+    - customer:RegistrationDate
+    - order:OrderDate
+    - order:Quantity
+    - order:TotalAmount
+    - product:ProductID
+    - product:ProductName
+    - product:Category
+    - product:Price
+    - shipment:ShippingAddress
+    - shipment:ShippingDate
+    - row_key
 
 #### **Workflow for HBase Loading:**
 - Data was read from HDFS.
