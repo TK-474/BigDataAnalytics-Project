@@ -1,0 +1,57 @@
+# services:
+#   web: 
+#     build:
+#       context: app
+#       target: builder
+#     # flask requires SIGINT to stop gracefully
+#     # (default stop signal from Compose is SIGTERM)
+#     stop_signal: SIGINT
+#     ports:
+#       - '8000:8000'
+
+# services:
+#   web: 
+#     build:
+#       context: app
+#       target: builder
+#     stop_signal: SIGINT
+#     ports:
+#       - '8000:8000'
+#     volumes:
+#       - ./app:/app  # Mount the app directory to the container
+
+
+# services:
+#   web: 
+#     build:
+#       context: app
+#       target: builder
+#     stop_signal: SIGINT
+#     ports:
+#       - '8000:8000'
+#     volumes:
+#       - ./app:/app  # Mount the app directory to the container
+#     environment:
+#       FLASK_ENV: development  # Enables debug mode
+
+
+version: "3.8"
+services:
+  web:
+    build:
+      context: app
+      target: builder
+    stop_signal: SIGINT
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./app:/app  # Mount the app directory to the container
+    environment:
+      FLASK_ENV: development  # Enables debug mode
+    networks:
+      - bda_network
+
+networks:
+  bda_network:
+    driver: bridge
+    name: bda_network

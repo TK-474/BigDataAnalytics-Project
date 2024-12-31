@@ -1,0 +1,145 @@
+version: "3.8"
+
+services:
+  zookeeperbda:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeperbda
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - bda_network
+    ports:
+      - "32181:2181"
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeperbda
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeperbda:2181  # Use internal port
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports:
+      - "9092:9092"
+    networks:
+      - bda_network
+
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    container_name: namenode
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bda_network
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    container_name: datanode
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bda_network
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop2.7.4-java8
+    container_name: resourcemanager
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bda_network
+
+  nodemanager1:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop2.7.4-java8
+    container_name: nodemanager
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bda_network
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
+    container_name: historyserver
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bda_network
+
+  hbase:
+    image: bde2020/hbase-standalone:1.0.0-hbase1.2.6
+    container_name: hbase
+    volumes:
+      - hbase_data:/hbase-data
+      - hbase_zookeeper_data:/zookeeper-data
+    ports:
+      - 16000:16000
+      - 16010:16010
+      - 16020:16020
+      - 16030:16030
+      - 2888:2888
+      - 3888:3888
+      - 2182:2181
+      - 9090:9090
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075"
+    env_file:
+      - ./hbase-standalone.env
+    networks:
+      - bda_network
+
+  spark-master-bda:
+    platform: linux/amd64
+    image: bde2020/spark-master:3.3.0-hadoop3.3
+    container_name: spark-master-bda
+    ports:
+      - "8082:8082"
+      - "7077:7077"
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_HOST=spark-master-bda
+    networks:
+      - bda_network
+
+  spark-worker-bda1:
+    platform: linux/amd64
+    image: bde2020/spark-worker:3.3.0-hadoop3.3
+    container_name: spark-worker-bda1
+    depends_on:
+      - spark-master-bda
+    ports:
+      - "8081:8081"
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master-bda:7077
+      - SPARK_MASTER=spark://spark-master-bda:7077
+    networks:
+      - bda_network
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  hadoop_historyserver:
+  hbase_data:
+  hbase_zookeeper_data:
+
+networks:
+  bda_network:
+    driver: bridge
+    name: bda_network
