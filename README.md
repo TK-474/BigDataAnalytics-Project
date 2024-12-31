@@ -137,6 +137,8 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 ### **5. Dashboarding**
 - Flask web application hosted dashboards for interactive data exploration.
 
+![DAG for Workflow](DAG.jpeg)
+
 ---
 
 ## **Technologies Used**
