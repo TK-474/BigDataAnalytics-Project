@@ -10,11 +10,12 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 - **Data Processing:** Apache Spark
 - **Visualization and Dashboarding:** Flask, Python, Pandas, Matplotlib/Plotly
 
+![Big Data Architecture](BDA_Project_Architecture.png)
+
 ---
 
 ## **Data Flow**
 
-![Big Data Architecture](BDA_Project_Architecture.png)
 
 ### **1. Data Generation**
 - **Why Generated Data?**
