@@ -14,6 +14,8 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 
 ## **Data Flow**
 
+![Big Data Architecture](Big%20Data%20Architecture%20(1).png)
+
 ### **1. Data Generation**
 - **Why Generated Data?**
   - We were unable to find a suitable dataset of the required size on Kaggle.
