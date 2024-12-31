@@ -62,7 +62,14 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 
 ---
 
-### **3. Data Transformation**
+### **3. Exploratory Data Analysis**
+- EDA was carried out on pre-transformed data to judge what transformations should be implemented
+- Box Plots, Density Grahs, Outlier and Missing Data Analysis was carried out.
+- This was done on Local System by communicating with docker and also by leveraging jupyter-pyspark container.
+
+---
+
+### **4. Data Transformation**
 #### **Apache Spark for Data Cleaning and Transformation**
   - Fixed missing values in TotalAmount column by deriving fro Product x Quantity.
   - Corrected typos in "Pakistan" spelling in Country column and replaced "GConsole" with "Gaming Console" in ProductName column.
@@ -72,7 +79,7 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 
 ---
 
-### **4. Storing Transformed Data in HBase**
+### **5. Storing Transformed Data in HBase**
 - After transformation, the cleaned and processed data was loaded into **HBase**.
 - **Schema in HBase:**
   - Table Name: `ec`
@@ -97,7 +104,7 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 - Data was written to HBase using Importtsv.
 ---
 
-### **5. Data Access and Visualization**
+### **6. Data Access and Visualization**
 #### **Accessing HBase Data via Thrift Server**
 - Using HBase’s **Thrift Server**, we exposed a port (9090) to access the cleaned data
 
