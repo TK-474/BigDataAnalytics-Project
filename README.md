@@ -11,7 +11,7 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 - **Visualization and Dashboarding:** Flask, Python, Pandas, Matplotlib/Plotly
 
 ![Big Data Architecture](BDA_Project_Architecture.png)
-
+![DAG for Workflow](DAG.jpeg)
 ---
 
 ## **Data Flow**
@@ -140,8 +140,6 @@ Done through the *data_modify.ipynb* file under Python Scripts.
 
 ### **5. Dashboarding**
 - Flask web application hosted dashboards for interactive data exploration.
-
-![DAG for Workflow](DAG.jpeg)
 
 ---
 
