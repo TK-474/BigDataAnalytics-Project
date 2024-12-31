@@ -66,6 +66,8 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 - EDA was carried out on pre-transformed data to judge what transformations should be implemented
 - Box Plots, Density Grahs, Outlier and Missing Data Analysis was carried out.
 - This was done on Local System by communicating with docker and also by leveraging jupyter-pyspark container.
+- For the container use the command: docker run --name pyspark-notebook --network bda_network -p 8888:8888 jupyter/pyspark-notebook start-notebook.sh --NotebookApp.token='' and use the EDA_spark.ipynb file
+- For the local EDA, use EDA.ipynb
 
 ---
 
@@ -174,17 +176,19 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 ## **How to Run the Project**
 1. **Generate Data:**
    - Run the Python script to generate the dataset.
-2. **Start Kafka:**
-   - Set up Kafka and run producer and consumer data to the `customer_orders` topic.
-3. **Upload to HDFS**
-   - Run the shell script named upload_to_hdfs.sh. Which puts the data in HDFS.
-3. **Run Spark Job:**
-   - Run the run_spark_job.sh shell script which will transform the data and put it in HDFS under a new folder.
-4. **Load Data to HBase:**
-   - Run the hdfs_to_hbase.sh script this will put the data in your HBASE.
-5. **Start Thrift**
-   - Start the thrift server in the HBASE container.
-5. **Launch Flask App:**
+2. **Start containers:**
+   - Navigate to docker-hdfs-kafka-spark-hbase directory and run docker-compose -f docker-compose-standalone.yml up -d. Then navigate to Flask App directory and run docker compose up --build.
+3. **Start Kafka:**
+   - Run producer.py and consumer.py to stream data to the `customer_orders` topic and into Namenode.
+4. **Upload to HDFS**
+   - Run the shell script named upload_to_hdfs.sh, which puts the data in HDFS. Ensure your data is in a data folder at the base of the project directory.
+5. **Run Spark Job:**
+   - Run the run_spark_job.sh shell script which will transform the data and put it in HDFS under a new folder. Ensure the spark_analysis.py script is in spark folder at the base of the project directory
+6. **Load Data to HBase:**
+   - Run the hdfs_to_hbase.sh script. This will put the data in your HBASE. Ensure you have a table named 'ec' created with the column families described in HBase schema above.
+7. **Start Thrift**
+   - Start the thrift server in the HBASE container using hbase thrift start command.
+8. **Launch Flask App:**
    - Start the Flask server and access dashboards at `http://localhost:8000`.
 
 ---
