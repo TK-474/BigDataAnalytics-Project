@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the directory of the script
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="../data"
 
 # File to be copied
 FILE="$SCRIPT_DIR/data1.csv"
