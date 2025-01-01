@@ -194,19 +194,19 @@ Below are the outputs from the Flask-based dashboard application:
 
 ## **How to Run the Project**
 1. **Generate Data:**
-   - Run the Python script *Data_gen.py* to generate the dataset. Then run the *data_modify.ipynb* to introduce some errors in our dataset.
+   - Run the Python script *Data_gen.py* to generate the dataset. Then run the *data_modify.ipynb* to introduce some errors in our dataset. Ensure your data is in a data folder at the base of the project directory.
 2. **Start containers:**
    - Navigate to docker-hdfs-kafka-spark-hbase directory and run *docker-compose -f docker-compose-standalone.yml up -d*. Then navigate to Flask App directory and run *docker compose up --build*.
 3. **Start Kafka:**
    - Run *producer.py* and *consumer.py* to stream data to the `customer_orders` topic and into Namenode.
 4. **Upload to HDFS**
-   - Run the shell script named *upload_to_hdfs.sh*, which puts the data in HDFS. Ensure your data is in a data folder at the base of the project directory.
+   - Run the shell script named *upload_to_hdfs.sh*, which puts the data in HDFS. 
 5. **Run Spark Job:**
    - Run the *run_spark_job.sh* shell script which will transform the data and put it in HDFS under a new folder. Ensure the *spark_analysis.py* script is in spark folder at the base of the project directory
 6. **Load Data to HBase:**
-   - Run the *hdfs_to_hbase.sh* script. This will put the data in your HBASE. Ensure you have a table named 'ec' created with the column families described in HBase schema above.
+   - Run the *hdfs_to_hbase.sh* script. This will put the data in your HBASE. Ensure you have a table named 'ec' created with the column families described in HBase schema above. Table can be created by bashing into hbase container, then typing hbase shell and then typing *create 'ec', 'product', 'customer', 'order', 'shipment'*
 7. **Start Thrift**
-   - Start the thrift server in the HBASE container using hbase thrift start command.
+   - Start the thrift server in the HBASE container using *hbase thrift start* command.
 8. **Launch Flask App:**
    - Start the Flask server and access dashboards at `http://localhost:8000`.
 
