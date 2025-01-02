@@ -12,6 +12,10 @@ This project demonstrates a complete end-to-end pipeline for big data processing
 
 ![Big Data Architecture](BDA_Project_Architecture.png)
 ![DAG for Workflow](DAG.jpeg)
+
+### **Project Demonstration Video:**
+[![Project Demonstration](https://img.youtube.com/vi/izA1go6Dulc/0.jpg)](https://youtu.be/izA1go6Dulc?si=mv7AjDbYcTh4EACT)
+
 ---
 
 ## **Data Flow**
